@@ -15,6 +15,41 @@
     useJmx="true"
     schedulePeriodForDestinationPurge="60000" >
 
+    <!--
+      For better performances use VM cursor and small memory limit.
+      For more information, see:
+
+      http://activemq.apache.org/message-cursors.html
+
+      Also, if your producer is "hanging", it's probably due to producer
+      flow control.
+
+      For more information, see:
+      http://activemq.apache.org/producer-flow-control.html
+    -->
+    <destinationPolicy>
+      <policyMap>
+        <policyEntries>
+          <policyEntry topic=">" producerFlowControl="true" memoryLimit="1mb">
+            <pendingSubscriberPolicy>
+              <vmCursor />
+            </pendingSubscriberPolicy>
+          </policyEntry>
+          <policyEntry queue=">" producerFlowControl="true" memoryLimit="1mb">
+            <!--
+              Use VM cursor for better latency
+              For more information, see:
+
+              http://activemq.apache.org/message-cursors.html
+
+            <pendingQueuePolicy>
+              <vmQueueCursor/>
+            </pendingQueuePolicy>
+            -->
+          </policyEntry>
+        </policyEntries>
+      </policyMap>
+    </destinationPolicy>
 
     <managementContext>
       <managementContext createConnector="false"/>
